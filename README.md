@@ -20,12 +20,23 @@ To use Faster Whisper CLI, simply run the `faster-whisper` command followed by t
 faster-whisper path/to/audio.wav
 ```
 
-This will transcribe the audio file using the default settings and print the output to the console.
+This will transcribe the audio file using the default settings and write an SRT file next to the input.
+
+Whisper-compatible output formats are available with `--output_format` (or `-f`):
+
+```
+faster-whisper path/to/audio.wav --output_format vtt
+faster-whisper path/to/audio.wav --output_format txt --output transcript.txt
+faster-whisper path/to/audio.wav --output_format all
+```
+
+Supported formats are `txt`, `vtt`, `srt`, `tsv`, `json`, and `all`.
 
 You can also specify various options to customize the transcription process:
 
 ```
 usage: faster-whisper [-h] [-o OUTPUT] [--language LANGUAGE] [--task TASK]
+                      [-f {txt,vtt,srt,tsv,json,all}]
                       [--beam_size BEAM_SIZE] [--best_of BEST_OF]
                       [--patience PATIENCE]
                       [--length_penalty LENGTH_PENALTY]

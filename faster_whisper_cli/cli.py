@@ -1,6 +1,8 @@
 import argparse
 import os
 from faster_whisper import WhisperModel
+from faster_whisper_cli.output import write_outputs
+
 
 
 def main():
@@ -11,7 +13,10 @@ def main():
     # transcribe params
     parser.add_argument(
         "audio", help="Path to the input file (or a file-like object), or the audio waveform.")
-    parser.add_argument("-o", "--output", help="Output .srt file")
+    parser.add_argument("-o", "--output", help="Output file when one format is selected")
+    parser.add_argument("-f", "--output_format", type=str, default="srt",
+                        choices=["txt", "vtt", "srt", "tsv", "json", "all"],
+                        help="format of the output file (default: srt; use all for every format)")
     parser.add_argument('--language', type=str, default=None,
                         help='the language spoken in the audio')
     parser.add_argument('--task', type=str, default='transcribe',
@@ -118,21 +123,10 @@ def main():
         vad_filter=args.vad_filter
     )
 
-    # Set default output filename
-    if not args.output:
-        # Use the input filename with a .srt extension
-        args.output = os.path.splitext(args.audio)[0] + ".srt"
 
-    # Write subtitle to output file
-    with open(args.output, "w", encoding="utf-8") as f:
-        for i, segment in enumerate(segments):
-            f.write(str(i+1) + "\n")
-            f.write("{:.2f}".format(segment.start) + " --> " +
-                    "{:.2f}".format(segment.end) + "\n")
-            f.write(segment.text + "\n")
-            f.write("\n")
-
-    print("Subtitle file saved to %s" % args.output)
+    output_paths = write_outputs(segments, info.language, args.audio,
+                                 args.output, args.output_format)
+    print("Output files saved to %s" % ", ".join(output_paths))
 
 
 if __name__ == "__main__":
