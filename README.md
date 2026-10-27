@@ -6,10 +6,10 @@ This CLI version of Faster Whisper allows you to quickly transcribe or translate
 
 ## Installation
 
-You can install Faster Whisper CLI using `pip`:
+You can install Faster Whisper CLI using `uv tool`:
 
 ```
-pip install faster-whisper-cli
+uv tool install .
 ```
 
 ## Usage
